@@ -4,8 +4,8 @@
 // This is the complete code for this article: http://www.andrespagella.com/snake-game
 
 define(
-    "snake", ['jquery'],
-    function(jQ) {
+    "snake", ['jquery', 'map'],
+    function(jQ, map) {
         var snakeObj = {};
 
         snakeObj.load = function() {
@@ -19,10 +19,8 @@ define(
                 speed = 500;
 
             // Initialize the matrix.
-            var map = new Array(20);
-            for (var i = 0; i < map.length; i++) {
-                map[i] = new Array(20);
-            }
+
+            var mapGame = new map();
 
             canvas.width = 204;
             canvas.height = 224;
@@ -31,10 +29,10 @@ define(
             body.appendChild(canvas);
 
             // Add the snake
-            map = generateSnake(map);
+            snake = mapGame.generateSnake(snake);
 
             // Add the food
-            map = generateFood(map);
+            mapGame.generateFood();
 
             drawGame();
 
@@ -100,16 +98,16 @@ define(
                         // Detect if we hit food and increase the score if we do,
                         // generating a new food position in the process, and also
                         // adding a new element to the snake array.
-                        if (map[snake[0].x][snake[0].y] === 1) {
+                        if (mapGame.isPointHere(snake[0].x, snake[0].y, 1)) {
                             score += 10;
-                            map = generateFood(map);
+                            mapGame.generateFood();
 
                             // Add a new body piece to the array
                             snake.push({
                                 x: snake[snake.length - 1].x,
                                 y: snake[snake.length - 1].y
                             });
-                            map[snake[snake.length - 1].x][snake[snake.length - 1].y] = 2;
+                            mapGame.setPoint(snake[snake.length - 1].x, snake[snake.length - 1].y, 2);
 
                             // If the score is a multiplier of 100 (such as 100, 200, 300, etc.)
                             // increase the level, which will make it go faster.
@@ -119,25 +117,25 @@ define(
 
                             // Let's also check that the head is not hitting other part of its body
                             // if it does, we also need to end the game.
-                        } else if (map[snake[0].x][snake[0].y] === 2) {
+                        } else if (mapGame.isPointHere(snake[0].x, snake[0].y, 2)) {
                             showGameOver();
                             return;
                         }
 
-                        map[snake[0].x][snake[0].y] = 2;
+                        mapGame.setPoint(snake[0].x, snake[0].y, 2);
                     } else {
                         // Remember that when they move, the body pieces move to the place
                         // where the previous piece used to be. If it's the last piece, it
                         // also needs to clear the last position from the matrix
                         if (i === (snake.length - 1)) {
-                            map[snake[i].x][snake[i].y] = null;
+                            mapGame.setPoint(snake[i].x, snake[i].y, null)
                         }
 
                         snake[i] = {
                             x: snake[i - 1].x,
                             y: snake[i - 1].y
                         };
-                        map[snake[i].x][snake[i].y] = 2;
+                        mapGame.setPoint(snake[i].x, snake[i].y, 2);
                     }
                 }
 
@@ -145,12 +143,12 @@ define(
                 drawMain();
 
                 // Start cycling the matrix
-                for (var x = 0; x < map.length; x++) {
-                    for (var y = 0; y < map[0].length; y++) {
-                        if (map[x][y] === 1) {
+                for (var x = 0; x < mapGame.point.length; x++) {
+                    for (var y = 0; y < mapGame.point[0].length; y++) {
+                        if (mapGame.isPointHere(x, y, 1)) {
                             ctx.fillStyle = 'black';
                             ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
-                        } else if (map[x][y] === 2) {
+                        } else if (mapGame.isPointHere(x, y, 2)) {
                             ctx.fillStyle = 'orange';
                             ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
                         }
@@ -175,46 +173,6 @@ define(
                 ctx.fillStyle = 'black';
                 ctx.font = '12px sans-serif';
                 ctx.fillText('Score: ' + score + ' - Level: ' + level, 2, 12);
-            }
-
-            function generateFood(map) {
-                // Generate a random position for the rows and the columns.
-                var rndX = Math.round(Math.random() * 19),
-                    rndY = Math.round(Math.random() * 19);
-
-                // We also need to watch so as to not place the food
-                // on the a same matrix position occupied by a part of the
-                // snake's body.
-                while (map[rndX][rndY] === 2) {
-                    rndX = Math.round(Math.random() * 19);
-                    rndY = Math.round(Math.random() * 19);
-                }
-
-                map[rndX][rndY] = 1;
-
-                return map;
-            }
-
-            function generateSnake(map) {
-                // Generate a random position for the row and the column of the head.
-                var rndX = Math.round(Math.random() * 19),
-                    rndY = Math.round(Math.random() * 19);
-
-                // Let's make sure that we're not out of bounds as we also need to make space to accomodate the
-                // other two body pieces
-                while ((rndX - snake.length) < 0) {
-                    rndX = Math.round(Math.random() * 19);
-                }
-
-                for (var i = 0; i < snake.length; i++) {
-                    snake[i] = {
-                        x: rndX - i,
-                        y: rndY
-                    };
-                    map[rndX - i][rndY] = 2;
-                }
-
-                return map;
             }
 
             function showGameOver() {
