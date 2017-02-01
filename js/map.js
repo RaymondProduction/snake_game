@@ -1,7 +1,6 @@
 define(
   'map',
-  ['snake'],
-  function(snakeModule) {
+  function() {
 
 
     function mapObj() {

@@ -1,5 +1,5 @@
 define(
-  'snake', ['jquery'],
+  'snake',
   function() {
 
     function snakeObj() {
