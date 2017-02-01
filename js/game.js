@@ -79,9 +79,25 @@ define(
                             // Let's also check that the head is not hitting other part of its body
                             // if it does, we also need to end the game.
                         } else if (mapGame.isPointHere(snake.getHead(), 2)) {
-                            // Disable the game.
+
+                            var button;
+                            button = "<button class='button' name='restart'>";
+                            button += "Restart</button>";
+                            jQ("body").append(jQ(button));
+                            jQ(".button").click(function(event) {
+                                nameButton = jQuery(this).attr("name");
+                                /*   if (nameButton == 'restart' && start == -1) {
+                                       start = 3;
+                                       jQ('.button').text("3");
+                                       beforeStartId = setInterval(runnerObj.beforeStart, 1000);
+                                   }*/
+                            });
+                             // Disable the game.
                             active = false;
                             draw.showGameOver();
+
+
+
                             return;
                         }
 
@@ -100,7 +116,7 @@ define(
                 }
 
                 // Draw the border as well as the score
-                draw.drawMain(score,level);
+                draw.drawMain(score, level);
                 draw.showMap(mapGame);
                 if (active) {
                     setTimeout(playGame, speed - (level * 50));
