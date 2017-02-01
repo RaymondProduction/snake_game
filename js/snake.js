@@ -1,198 +1,83 @@
-// Code by M. Andres Pagella <andres.pagella at gmail dot com>
-// Do whatever you want with this code :)
-// Please visit http://www.andrespagella.com
-// This is the complete code for this article: http://www.andrespagella.com/snake-game
-
 define(
-    "snake", ['jquery', 'map'],
-    function(jQ, map) {
-        var snakeObj = {};
+  'snake', ['jquery'],
+  function() {
 
-        snakeObj.load = function() {
-            var canvas = document.createElement('canvas'),
-                ctx = canvas.getContext('2d'),
-                score = 0,
-                level = 0,
-                direction = 0,
-                snake = new Array(3),
-                active = true,
-                speed = 500;
+    function snakeObj() {
+      this.snake = new Array(3);
+    }
 
-            // Initialize the matrix.
+    snakeObj.prototype.moveDirection = function(direction) {
+      switch (direction) {
+        case 0: // Right
+          this.snake[0] = {
+            x: this.snake[0].x + 1,
+            y: this.snake[0].y
+          }
+          break;
+        case 1: // Left
+          this.snake[0] = {
+            x: this.snake[0].x - 1,
+            y: this.snake[0].y
+          }
+          break;
+        case 2: // Up
+          this.snake[0] = {
+            x: this.snake[0].x,
+            y: this.snake[0].y - 1
+          }
+          break;
+        case 3: // Down
+          this.snake[0] = {
+            x: this.snake[0].x,
+            y: this.snake[0].y + 1
+          }
+          break;
+      }
+    }
 
-            var mapGame = new map();
+    snakeObj.prototype.isOutOfBounds = function() {
+      return (this.snake[0].x < 0 ||
+        this.snake[0].x >= 20 ||
+        this.snake[0].y < 0 ||
+        this.snake[0].y >= 20);
+    }
 
-            canvas.width = 204;
-            canvas.height = 224;
+    snakeObj.prototype.getHead = function() {
+      return {
+        x: this.snake[0].x,
+        y: this.snake[0].y
+      }
+    }
 
-            var body = document.getElementsByTagName('body')[0];
-            body.appendChild(canvas);
+    snakeObj.prototype.addBodyPiece = function() {
+      this.snake.push({
+        x: this.snake[this.snake.length - 1].x,
+        y: this.snake[this.snake.length - 1].y
+      });
 
-            // Add the snake
-            snake = mapGame.generateSnake(snake);
+    }
 
-            // Add the food
-            mapGame.generateFood();
+    snakeObj.prototype.setBodyPiece = function(i, x, y) {
+      this.snake[i]={x : x, y: y};
+    }
+    snakeObj.prototype.getBodyPiece = function(i) {
+      return {
+        x: this.snake[i].x,
+        y: this.snake[i].y
+      }
+    }
 
-            drawGame();
+    snakeObj.prototype.Shift = function(i) {
+      this.snake[i] = {
+        x: this.snake[i - 1].x,
+        y: this.snake[i - 1].y
+      };
+    }
 
-            jQ(document).keydown(function(e) {
-                if (e.keyCode === 38 && direction !== 3) {
-                    direction = 2; // Up
-                } else if (e.keyCode === 40 && direction !== 2) {
-                    direction = 3; // Down
-                } else if (e.keyCode === 37 && direction !== 0) {
-                    direction = 1; // Left
-                } else if (e.keyCode === 39 && direction !== 1) {
-                    direction = 0; // Right
-                }
-            });
+    snakeObj.prototype.length = function() {
+      return this.snake.length;
+    }
 
-            function drawGame() {
-                // Clear the canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return snakeObj;
 
-                // Traverse all the body pieces of the snake, starting from the last one
-                for (var i = snake.length - 1; i >= 0; i--) {
-
-                    // We're only going to perform the collision detection using the head
-                    // so it will be handled differently than the rest
-                    if (i === 0) {
-                        switch (direction) {
-                            case 0: // Right
-                                snake[0] = {
-                                    x: snake[0].x + 1,
-                                    y: snake[0].y
-                                }
-                                break;
-                            case 1: // Left
-                                snake[0] = {
-                                    x: snake[0].x - 1,
-                                    y: snake[0].y
-                                }
-                                break;
-                            case 2: // Up
-                                snake[0] = {
-                                    x: snake[0].x,
-                                    y: snake[0].y - 1
-                                }
-                                break;
-                            case 3: // Down
-                                snake[0] = {
-                                    x: snake[0].x,
-                                    y: snake[0].y + 1
-                                }
-                                break;
-                        }
-
-                        // Check that it's not out of bounds. If it is show the game over popup
-                        // and exit the function.
-                        if (snake[0].x < 0 ||
-                            snake[0].x >= 20 ||
-                            snake[0].y < 0 ||
-                            snake[0].y >= 20) {
-                            showGameOver();
-                            return;
-                        }
-
-                        // Detect if we hit food and increase the score if we do,
-                        // generating a new food position in the process, and also
-                        // adding a new element to the snake array.
-                        if (mapGame.isPointHere(snake[0].x, snake[0].y, 1)) {
-                            score += 10;
-                            mapGame.generateFood();
-
-                            // Add a new body piece to the array
-                            snake.push({
-                                x: snake[snake.length - 1].x,
-                                y: snake[snake.length - 1].y
-                            });
-                            mapGame.setPoint(snake[snake.length - 1].x, snake[snake.length - 1].y, 2);
-
-                            // If the score is a multiplier of 100 (such as 100, 200, 300, etc.)
-                            // increase the level, which will make it go faster.
-                            if ((score % 100) == 0) {
-                                level += 1;
-                            }
-
-                            // Let's also check that the head is not hitting other part of its body
-                            // if it does, we also need to end the game.
-                        } else if (mapGame.isPointHere(snake[0].x, snake[0].y, 2)) {
-                            showGameOver();
-                            return;
-                        }
-
-                        mapGame.setPoint(snake[0].x, snake[0].y, 2);
-                    } else {
-                        // Remember that when they move, the body pieces move to the place
-                        // where the previous piece used to be. If it's the last piece, it
-                        // also needs to clear the last position from the matrix
-                        if (i === (snake.length - 1)) {
-                            mapGame.setPoint(snake[i].x, snake[i].y, null)
-                        }
-
-                        snake[i] = {
-                            x: snake[i - 1].x,
-                            y: snake[i - 1].y
-                        };
-                        mapGame.setPoint(snake[i].x, snake[i].y, 2);
-                    }
-                }
-
-                // Draw the border as well as the score
-                drawMain();
-
-                // Start cycling the matrix
-                for (var x = 0; x < mapGame.point.length; x++) {
-                    for (var y = 0; y < mapGame.point[0].length; y++) {
-                        if (mapGame.isPointHere(x, y, 1)) {
-                            ctx.fillStyle = 'black';
-                            ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
-                        } else if (mapGame.isPointHere(x, y, 2)) {
-                            ctx.fillStyle = 'orange';
-                            ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
-                        }
-                    }
-                }
-
-                if (active) {
-                    setTimeout(drawGame, speed - (level * 50));
-                }
-            }
-
-
-            function drawMain() {
-                ctx.lineWidth = 2; // Our border will have a thickness of 2 pixels
-                ctx.strokeStyle = 'black'; // The border will also be black
-
-                // The border is drawn on the outside of the rectangle, so we'll
-                // need to move it a bit to the right and up. Also, we'll need
-                // to leave a 20 pixels space on the top to draw the interface.
-                ctx.strokeRect(2, 20, canvas.width - 4, canvas.height - 24);
-
-                ctx.fillStyle = 'black';
-                ctx.font = '12px sans-serif';
-                ctx.fillText('Score: ' + score + ' - Level: ' + level, 2, 12);
-            }
-
-            function showGameOver() {
-                // Disable the game.
-                active = false;
-
-                // Clear the canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = 'black';
-                ctx.font = '16px sans-serif';
-
-                ctx.fillText('Game Over!', ((canvas.width / 2) - (ctx.measureText('Game Over!').width / 2)), 50);
-
-                ctx.font = '12px sans-serif';
-
-                ctx.fillText('Your Score Was: ' + score, ((canvas.width / 2) - (ctx.measureText('Your Score Was: ' + score).width / 2)), 70);
-
-            }
-        };
-
-        return snakeObj;
-    });
+  });

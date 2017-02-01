@@ -1,5 +1,5 @@
-require(['jquery' , 'snake'], function(jQ,snake) {
-  snake.load();
+require(['jquery' , 'game'], function(jQ,game) {
+  game.load();
 
   /*var test = new map();
 

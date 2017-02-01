@@ -1,6 +1,7 @@
 define(
-  'map', ['jquery'],
-  function() {
+  'map',
+  ['snake'],
+  function(snakeModule) {
 
 
     function mapObj() {
@@ -33,28 +34,30 @@ define(
 
       // Let's make sure that we're not out of bounds as we also need to make space to accomodate the
       // other two body pieces
-      while ((rndX - snake.length) < 0) {
+      while ((rndX - snake.length()) < 0) {
         rndX = Math.round(Math.random() * 19);
       }
 
-      for (var i = 0; i < snake.length; i++) {
-        snake[i] = {
-          x: rndX - i,
-          y: rndY
-        };
+      for (var i = 0; i < snake.length(); i++) {
+        snake.setBodyPiece(i,rndX - i,rndY);
         this.point[rndX - i][rndY] = 2;
       }
 
       return snake;
     }
 
-    mapObj.prototype.setPoint =function(x,y,e){
-      this.point[x][y] = e;
+    mapObj.prototype.setPoint =function(s,e){
+      this.point[s.x][s.y] = e;
     }
 
-    mapObj.prototype.isPointHere = function(x,y,e){
+    mapObj.prototype.isPointHere = function(s,e){
+      return this.point[s.x][s.y] === e;
+    }
+
+    mapObj.prototype.isPointHereXY = function(x,y,e){
       return this.point[x][y] === e;
     }
+
 
     return mapObj;
 
