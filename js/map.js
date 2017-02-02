@@ -41,8 +41,6 @@ define(
         snake.setBodyPiece(i,rndX - i,rndY);
         this.point[rndX - i][rndY] = 2;
       }
-
-      return snake;
     }
 
     mapObj.prototype.setPoint =function(s,e){
