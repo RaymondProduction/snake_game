@@ -1,3 +1,6 @@
-require(['jquery' , 'game'], function(jQ,game) {
-  game.load();
+require(['jquery', 'game'], function(jQ, gameModule) {
+  jQ(document).ready(function() {
+    game = new  gameModule();
+  });
+
 });

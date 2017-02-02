@@ -1,6 +1,6 @@
 define(
-  'draw',
-  function() {
+  'draw', ['jquery'],
+  function(jQ) {
     var drawObj = {};
 
     drawObj.init = function() {
@@ -10,9 +10,14 @@ define(
       canvas.height = 224;
       body = document.getElementsByTagName('body')[0];
       body.appendChild(canvas);
+
+
+      //button = document.createElement('button');
+      // body.appendChild(button);
+
     }
 
-    drawObj.drawMain = function(score,level) {
+    drawObj.drawMain = function(score, level) {
       ctx.lineWidth = 2; // Our border will have a thickness of 2 pixels
       ctx.strokeStyle = 'black'; // The border will also be black
 
