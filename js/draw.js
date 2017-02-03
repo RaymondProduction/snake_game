@@ -4,12 +4,14 @@ define(
     var drawObj = {};
 
     drawObj.init = function() {
+      div = document.createElement('div');
       canvas = document.createElement('canvas');
       ctx = canvas.getContext('2d');
       canvas.width = 204;
       canvas.height = 224;
       body = document.getElementsByTagName('body')[0];
-      body.appendChild(canvas);
+      body.appendChild(div);
+      div.appendChild(canvas);
 
 
       //button = document.createElement('button');
