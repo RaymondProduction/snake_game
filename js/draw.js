@@ -3,11 +3,14 @@ define(
   function(jQ) {
 
     function drawObj(){
+      // Size pixel
+      this.sizePix=20;
+
       div = document.createElement('div');
       canvas = document.createElement('canvas');
       this.ctx = canvas.getContext('2d');
-      canvas.width = 204;
-      canvas.height = 224;
+      canvas.width = this.sizePix*20+4;  // w*count+4
+      canvas.height = this.sizePix*20+24; //h*count+24
       body = document.getElementsByTagName('body')[0];
       body.appendChild(div);
       div.appendChild(canvas);
@@ -15,6 +18,9 @@ define(
 
     drawObj.prototype.clearCanvas = function(){
        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //   this.ctx.fillStyle = 'yellow';
+    //   this.ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     drawObj.prototype.drawMain = function(score, level) {
@@ -24,11 +30,11 @@ define(
       // The border is drawn on the outside of the rectangle, so we'll
       // need to move it a bit to the right and up. Also, we'll need
       // to leave a 20 pixels space on the top to draw the interface.
-      this.ctx.strokeRect(2, 20, canvas.width - 4, canvas.height - 24);
+      this.ctx.strokeRect(2, 2*this.sizePix, canvas.width - 4, canvas.height-2.4*this.sizePix);
 
       this.ctx.fillStyle = 'black';
-      this.ctx.font = '12px sans-serif';
-      this.ctx.fillText('Score: ' + score + ' - Level: ' + level, 2, 12);
+      this.ctx.font = 1.2+this.sizePix+'px sans-serif';
+      this.ctx.fillText('Score: ' + score + ' - Level: ' + level, 2, 1.2*this.sizePix);
     }
 
     drawObj.prototype.showGameOver = function(score) {
@@ -37,13 +43,13 @@ define(
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       this.ctx.fillStyle = 'black';
-      this.ctx.font = '16px sans-serif';
+      this.ctx.font = 1.6*this.sizePix+'px sans-serif';
 
-      this.ctx.fillText('Game Over!', ((canvas.width / 2) - (ctx.measureText('Game Over!').width / 2)), 50);
+      this.ctx.fillText('Game Over!', ((canvas.width / 2) - (this.ctx.measureText('Game Over!').width / 2)), 5*this.sizePix);
 
-      this.ctx.font = '12px sans-serif';
+      this.ctx.font = 1.2*this.sizePix+'px sans-serif';
 
-      this.ctx.fillText('Your Score Was: ' + score, ((canvas.width / 2) - (ctx.measureText('Your Score Was: ' + score).width / 2)), 70);
+      this.ctx.fillText('Your Score Was: ' + score, ((canvas.width / 2) - (this.ctx.measureText('Your Score Was: ' + score).width / 2)), 7*this.sizePix);
 
     }
 
@@ -53,10 +59,10 @@ define(
         for (var y = 0; y < map.point[0].length; y++) {
           if (map.isPointHereXY(x, y, 1)) {
             this.ctx.fillStyle = 'black';
-            this.ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
+            this.ctx.fillRect(x * this.sizePix, y * this.sizePix + 20, this.sizePix, this.sizePix);
           } else if (map.isPointHereXY(x, y, 2)) {
             this.ctx.fillStyle = 'orange';
-            this.ctx.fillRect(x * 10, y * 10 + 20, 10, 10);
+            this.ctx.fillRect(x * this.sizePix, y * this.sizePix + 20, this.sizePix, this.sizePix);
           }
         }
       }
