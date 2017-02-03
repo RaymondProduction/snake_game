@@ -1,0 +1,48 @@
+Редактор для удобства программиирования Sublime Text
+
+Настройка редактора
+
+1) Установим Package Control 
+   https://packagecontrol.io/installation
+2) Настроим Preferencse - Settings
+
+{
+  "always_show_minimap_viewport": true,
+  "bold_folder_labels": true,
+  "color_scheme": "Packages/Color Scheme - Default/iPlastic.tmTheme",
+  "default_line_ending": "unix",
+  "draw_minimap_border": true,
+  "ensure_newline_at_eof_on_save": true,
+  "experimentalDecorators": true,
+  "folder_exclude_patterns":
+  [
+    "node_modules",
+    ".git"
+  ],
+  "font_options":
+  [
+    "subpixel_antialias"
+  ],
+  "font_size": 12.0,
+  "highlight_line": true,
+  "highlight_modified_tabs": true,
+  "ignored_packages":
+  [
+    "Vintage"
+  ],
+  "rulers":
+  [
+    80,
+    120
+  ],
+  "scroll_past_end": true,
+  "spell_check": true,
+  "tab_size": 2,
+  "trailing_spaces_highlight_color": "all",
+  "translate_tabs_to_spaces": true,
+  "trim_trailing_white_space_on_save": true
+}
+
+Плюшки
+ View - Layout- <> Позволяет выбрать количество паналерей просмотра
+ Ctrl + P Быстрий поиск файлов

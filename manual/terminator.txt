@@ -1,0 +1,57 @@
+1) Сделай вид своего терминатора (размести в нужном порядке части терминатора, сделай split)
+2) Сохранение определенного шаболна (Параметры >> Шаблоны >> Добавить)
+3) Дополнительно настрой через файл  ~/.config/terminator/config
+4) Добавь запуск с командной строки, рабочую папку т. д.
+5) Поле command для команд или набор через ";", чтоб после завершение оставались в терминале bash делай
+6) Рабочая папка параметр directory
+7) Для запуска шаблона запускаем терминатор с параметром -l и названием шаблона (terminator -l <Название шаблона>)
+Пример:
+  [[<Название шаблона>]]
+    [[[child0]]]
+      fullscreen = False
+      last_active_term = 2f79f589-9070-4af5-8674-c668b056a30b
+      last_active_window = True
+      maximised = False
+      order = 0
+      parent = ""
+      position = 65:24
+      size = 1520, 825
+      title = raymond@raymond-acer: ~/dev/snake_game
+      type = Window
+    [[[child1]]]
+      order = 0
+      parent = child0
+      position = 757
+      ratio = 0.5
+      type = HPaned
+    [[[child2]]]
+      order = 0
+      parent = child1
+      position = 409
+      ratio = 0.499393939394
+      type = VPaned
+    [[[terminal3]]]
+      command = <команды или набор через ";", чтоб после завершение оставались в терминале bash делай, чтоб показать команду делай перед ней ее echo>
+      directory = <тут рабочий директорий (папка)>
+      order = 0
+      parent = child2
+      profile = default
+      type = Terminal
+      uuid = 2f79f589-9070-4af5-8674-c668b056a30b
+    [[[terminal4]]]
+      command = echo node server.js --port 8000 --directory /home/raymond/dev/snake_game;node server.js --port 8000 --directory /home/raymond/dev/snake_game; bash
+      directory = /home/raymond/dev/koawebserver
+      order = 1
+      parent = child2
+      profile = default
+      type = Terminal
+      uuid = af7489e8-0923-48c1-bd86-04c81333c116
+    [[[terminal5]]]
+      command = echo karma start karma.conf.js; karma start karma.conf.js; bash
+      directory = /home/raymond/dev/snake_game
+      order = 1
+      parent = child1
+      profile = default
+      type = Terminal
+      uuid = 95b05e1f-9559-438f-984e-7c8620024
+
