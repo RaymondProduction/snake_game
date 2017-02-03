@@ -5,11 +5,13 @@
 
 define(
     "game", ['jquery', 'map', 'snake', 'draw'],
-    function(jQ, map, snakeModule, draw) {
+    function(jQ, map, snakeModule, drawModule) {
 
         function gameObj() {
             this.defaultProperties();
-            draw.init();
+
+            this.draw = new drawModule();
+
             this.playGame();
 
             var self = this;
@@ -83,7 +85,7 @@ define(
         gameObj.prototype.playGame = function() {
             var self = this;
             // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+           this.draw.clearCanvas();
             // Traverse all the body pieces of the snake, starting from the last one
             for (var i = this.snake.length() - 1; i >= 0; i--) {
 
@@ -99,7 +101,7 @@ define(
 
                     if (this.snake.isOutOfBounds()) {
                         this.restartGame();
-                        draw.showGameOver(this.score);
+                        this.draw.showGameOver(this.score);
                         return;
                     }
 
@@ -130,7 +132,7 @@ define(
 
                         this.active = false;
                         this.restartGame();
-                        draw.showGameOver();
+                        this.draw.showGameOver();
 
 
 
@@ -152,8 +154,8 @@ define(
             }
 
             // Draw the border as well as the this.score
-            draw.drawMain(this.score, this.level);
-            draw.showMap(this.mapGame);
+            this.draw.drawMain(this.score, this.level);
+            this.draw.showMap(this.mapGame);
             if (this.active) {
                 setTimeout(function() {
                     self.playGame();

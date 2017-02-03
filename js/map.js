@@ -26,6 +26,8 @@ define(
       this.point[rndX][rndY] = 1;
     }
 
+
+
      mapObj.prototype.generateSnake = function(snake) {
       // Generate a random position for the row and the column of the head.
       var rndX = Math.round(Math.random() * 19),
