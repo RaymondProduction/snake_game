@@ -71,11 +71,9 @@ define(
             var self = this;
             if (this.start == -1) {
                 jQ('button').remove()
-                clearInterval(function() {
-                    self.beforeStartId();
-                });
                 this.defaultProperties();
                 this.playGame();
+                 clearInterval(self.beforeStartId);
             } else {
                 jQ('.button').text(this.start);
             }
