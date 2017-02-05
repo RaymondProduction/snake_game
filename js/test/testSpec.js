@@ -1,14 +1,16 @@
-define(['map', 'snake', 'draw'],
-  function(mapModule, snakeModule, drawModule) {
+define(['map', 'snake', 'draw', 'game'],
+  function(mapModule, snakeModule, drawModule, gameModule) {
 
     var map,
       snake,
-      draw
+      draw,
+      game
 
     beforeEach(function() {
       map = new mapModule();
       snake = new snakeModule();
       draw = new drawModule();
+      game = new gameModule();
     });
 
 
@@ -199,12 +201,30 @@ define(['map', 'snake', 'draw'],
         ]);
 
         expect(draw.ctx.fillRect.calls.argsFor(1)).toEqual([
-          2* draw.sizePix,
+          2 * draw.sizePix,
           4 * draw.sizePix,
           draw.sizePix,
           draw.sizePix
         ]);
       });
+
+    })
+
+    describe('Test for game module', function() {
+      it('works defaultProperties', function() {
+        game.defaultProperties();
+        expect(game.score).toEqual(0);
+        expect(game.level).toEqual(0);
+        expect(game.direction).toEqual(0);
+        expect(game.active).toEqual(true);
+        expect(game.speed).toEqual(500);
+        expect(game.start).toEqual(-1);
+      });
+
+      it('works restartGame',function(){
+
+      });
+
 
     })
 
