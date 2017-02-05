@@ -15,7 +15,7 @@ requirejs.config({
         'game':'../js/game',
         'draw':'../js/draw',
         'map':'../js/map',
-        'snake':'../js/map'
+        'snake':'../js/snake'
         //'canvas':'../bower_components/canvas-5-polyfill/canvas'
     },
 
