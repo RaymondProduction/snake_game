@@ -2,7 +2,8 @@ define(['map', 'snake', 'draw'],
   function(mapModule, snakeModule, drawModule) {
 
     var map,
-      snake
+      snake,
+      draw
 
     beforeEach(function() {
       map = new mapModule();
@@ -152,45 +153,59 @@ define(['map', 'snake', 'draw'],
 
       it('works drawMain', function() {
         spyOn(draw.ctx, 'fillText');
-        spyOn(draw.ctx,'strokeRect');
+        spyOn(draw.ctx, 'strokeRect');
 
-        var p2=2*draw.sizePix;
-        var p3=canvas.width-4;
-        var p4=canvas.height-2*draw.sizePix-1;
+        var p2 = 2 * draw.sizePix;
+        var p3 = canvas.width - 4;
+        var p4 = canvas.height - 2 * draw.sizePix - 1;
 
         draw.drawMain();
-        expect(draw.ctx.strokeRect).toHaveBeenCalledWith(2,p2,p3,p4);
+        expect(draw.ctx.strokeRect).toHaveBeenCalledWith(2, p2, p3, p4);
         expect(draw.ctx.fillText).toHaveBeenCalled();
         expect(draw.ctx.lineWidth).toEqual(2);
         // #000000 - black
         expect(draw.ctx.strokeStyle).toEqual('#000000');
       })
 
-      it('works showGameOver',function(){
-          spyOn(draw.ctx, 'clearRect');
-          spyOn(draw.ctx,'fillText');
-          draw.showGameOver();
-          expect(draw.ctx.clearRect).toHaveBeenCalledWith(0, 0, canvas.width, canvas.height);
-          expect(draw.ctx.fillText).toHaveBeenCalled();
-          expect(draw.ctx.fillStyle).toEqual('#000000');
-        //  expect(draw.ctx)
-/*
-
-      this.ctx.fillStyle = 'black';
-      this.ctx.font = 1.6*this.sizePix+'px sans-serif';
-
-      this.ctx.fillText('Game Over!', ((canvas.width / 2) - (this.ctx.measureText('Game Over!').width / 2)), 6*this.sizePix);
-
-      this.ctx.font = 1.2*this.sizePix+'px sans-serif';
-
-      this.ctx.fillText('Your Score Was: ' + score, ((canvas.width / 2) - (this.ctx.measureText('Your Score Was: ' + score).width / 2)), 8*this.sizePix);
-*/
-
-
-
-
-
+      it('works showGameOver', function() {
+        spyOn(draw.ctx, 'clearRect');
+        spyOn(draw.ctx, 'fillText');
+        draw.showGameOver();
+        expect(draw.ctx.clearRect).toHaveBeenCalledWith(0, 0, canvas.width, canvas.height);
+        expect(draw.ctx.fillText).toHaveBeenCalled();
+        expect(draw.ctx.fillStyle).toEqual('#000000');
+        expect(draw.ctx.font).toEqual(1.2 * draw.sizePix + 'px sans-serif');
       })
+
+      it('works showMap', function() {
+
+        spyOn(map, 'isPointHereXY').and.callFake(function(x, y, i) {
+          return (x == 1 &&
+            y == 1 &&
+            i == 1 ||
+            x == 2 &&
+            y == 2 &&
+            i == 2);
+        });
+        spyOn(draw.ctx, 'fillRect');
+        draw.showMap(map);
+        expect(map.isPointHereXY).toHaveBeenCalled();
+
+        expect(draw.ctx.fillRect.calls.argsFor(0)).toEqual([
+          draw.sizePix,
+          3 * draw.sizePix,
+          draw.sizePix,
+          draw.sizePix
+        ]);
+
+        expect(draw.ctx.fillRect.calls.argsFor(1)).toEqual([
+          2* draw.sizePix,
+          4 * draw.sizePix,
+          draw.sizePix,
+          draw.sizePix
+        ]);
+      });
+
     })
 
   });
