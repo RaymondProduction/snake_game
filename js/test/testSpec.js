@@ -1,20 +1,14 @@
 define(['map', 'snake', 'draw', 'game'],
   function(mapModule, snakeModule, drawModule, gameModule) {
 
-    var map,
-      snake,
-      draw,
-      game
-
-    beforeEach(function() {
-      map = new mapModule();
-      snake = new snakeModule();
-      draw = new drawModule();
-      game = new gameModule();
-    });
-
-
     describe('Test for map module', function() {
+      var map,snake;
+
+      beforeEach(function() {
+        snake = new snakeModule();
+        map = new mapModule();
+      });
+
 
       it('works setPoint', function() {
         var point = {
@@ -74,6 +68,14 @@ define(['map', 'snake', 'draw', 'game'],
 
 
     describe('Test for snake module', function() {
+      var map,
+        snake;
+
+      beforeEach(function() {
+        map = new mapModule();
+        snake = new snakeModule();
+      });
+
 
       it('works moveDirection and getHead', function() {
         map.generateSnake(snake);
@@ -147,6 +149,13 @@ define(['map', 'snake', 'draw', 'game'],
     });
 
     describe('Test for draw module', function() {
+      var map,
+        draw;
+      beforeEach(function() {
+        map = new mapModule();
+        draw = new drawModule();
+      });
+
       it('works clearCanvas', function() {
         spyOn(draw.ctx, 'clearRect');
         draw.clearCanvas();
@@ -211,6 +220,12 @@ define(['map', 'snake', 'draw', 'game'],
     })
 
     describe('Test for game module', function() {
+      var game;
+
+      beforeEach(function() {
+        game = new gameModule();
+      });
+
       it('works defaultProperties', function() {
         game.defaultProperties();
         expect(game.score).toEqual(0);
@@ -221,7 +236,7 @@ define(['map', 'snake', 'draw', 'game'],
         expect(game.start).toEqual(-1);
       });
 
-      it('works restartGame',function(){
+      it('works restartGame', function() {
 
       });
 
