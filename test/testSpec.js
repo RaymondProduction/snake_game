@@ -1,8 +1,8 @@
-define(['map', 'snake', 'draw', 'game'],
-  function(mapModule, snakeModule, drawModule, gameModule) {
+define(['map', 'snake', 'draw', 'game', 'jquery'],
+  function(mapModule, snakeModule, drawModule, gameModule, jQ) {
 
     describe('Test for map module', function() {
-      var map,snake;
+      var map, snake;
 
       beforeEach(function() {
         snake = new snakeModule();
@@ -236,9 +236,19 @@ define(['map', 'snake', 'draw', 'game'],
         expect(game.start).toEqual(-1);
       });
 
-      it('works restartGame', function() {
-
+      it('Corrects up key', function() {
+        var e = jQuery.Event("keydown");
+        e.keyCode = 38;
+        jQ(document).trigger(e);
+        expect(game.direction).toEqual(2);
       });
+      it('Corrects down key', function() {
+        var e = jQuery.Event("keydown");
+        e.keyCode = 40;
+        jQ(document).trigger(e);
+        expect(game.direction).toEqual(3);
+      });
+
 
 
     })
